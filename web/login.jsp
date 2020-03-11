@@ -28,7 +28,7 @@
                     </div>
                     <div class="columnaDerecha">
                         <div class="casilla"><input type="text" /></div>
-                        <div class="casilla"><input type="text" /></div>
+                        <div class="casilla"><input type="password" /></div>
                     </div>
                 </div>
                 <div class="subpie">
