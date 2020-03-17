@@ -29,26 +29,93 @@ public class servletUsuarios extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    usuarios usu;
+    
+    boolean checkMail(String correo)
+    {
+        boolean checked = false;
+        for(int i=0; i<=correo.length(); i++)
+        {
+            if(correo.charAt(i)== '@')
+            {
+                checked = true;
+            }
+        }
+        return checked;
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException 
+    {
+        
+        
+        
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet servletUsuarios</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet servletUsuarios at " + request.getContextPath() + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("nombre") + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("apellidos") + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("correo") + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("user") + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("pass") + "</h1>");
-            out.println("<h1>Usuario: " + request.getParameter("repass") + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        try (PrintWriter out = response.getWriter()) 
+        {
+            
+            String nombre = request.getParameter("nombre");
+            String apellidos = request.getParameter("apellidos");
+            String correo = request.getParameter("correo");
+            String user = request.getParameter("user");
+            String pass = request.getParameter("pass");
+            String repass = request.getParameter("repass");
+            String userlogin = request.getParameter("userlogin");
+            String passlogin = request.getParameter("passlogin");
+
+            if(userlogin == null && passlogin == null)
+            {
+                //Registro nuevo
+                if(!(pass.equals(repass)))
+                {
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Servlet servletUsuarios</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<p> La contraseña y su repetición son diferentes, por favor comprueba </p>");
+                    out.println("<a href=\"registroUsu.jsp\">Volver</a>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+                else if(checkMail(correo) == false)
+                {
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Servlet servletUsuarios</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("<p> El email es icorrecto </p>");
+                    out.println("<a href=\"registroUsu.jsp\">Volver</a>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+                else
+                {
+                    usu = new usuarios(nombre, apellidos, correo, user, pass);
+                    usu.registrar();
+                }
+            }
+            else
+            {
+                //Login
+                if(userlogin == null || passlogin == null)
+                {
+                    out.println("<html>");
+                    out.println("<head>");
+                    out.println("<title>Servlet servletUsuarios</title>");            
+                    out.println("</head>");
+                    out.println("<body>");
+                    out.println("alguno de los 2 campos está en blanco, por favor, rellenalo de nuevo.");
+                    out.println("<a href=\"login.jsp\">Volver</a>");
+                    out.println("</body>");
+                    out.println("</html>");
+                }
+                else
+                {
+                    usu = new usuarios(userlogin, passlogin);
+                }
+            }
         }
     }
 

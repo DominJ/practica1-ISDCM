@@ -20,21 +20,23 @@
         </header>
         <section>
             <div class="principal">
-                <div class="subcabecera" id="FontTitle">Login de usuarios</div>
-                <div class="subprincipal">
-                    <div class="columnaIzquierda">
-                        <div class="casilla">Nombre de usuario:</div>
-                        <div class="casilla">Contraseña:</div>
+                <form action="servletUsuarios" method="get">
+                    <div class="subcabecera" id="FontTitle">Login de usuarios</div>
+                    <div class="subprincipal">
+                        <div class="columnaIzquierda">
+                            <div class="casilla">Nombre de usuario:</div>
+                            <div class="casilla">Contraseña:</div>
+                        </div>
+                        <div class="columnaDerecha">
+                            <div class="casilla"><input name="userlogin" type="text" /></div>
+                            <div class="casilla"><input name="passlogin" type="password" /></div>
+                        </div>
                     </div>
-                    <div class="columnaDerecha">
-                        <div class="casilla"><input type="text" /></div>
-                        <div class="casilla"><input type="password" /></div>
+                    <div class="subpie">
+                        <input type="submit" class="myButton" value="Login" />
+                        <a href="registroUsu.jsp" class="myButton">Registrar</a>
                     </div>
-                </div>
-                <div class="subpie">
-                    <a href="#" class="myButton" onclick='alert("que paxa vixente")'>Login</a>
-                    <a href="registroUsu.jsp" class="myButton">Registrar</a>
-                </div>
+                </form>
             </div>
         </section>
         <footer>

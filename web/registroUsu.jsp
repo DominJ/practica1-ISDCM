@@ -41,6 +41,7 @@
                         </div>
                     </div>
                     <div class="subpie">
+                        <a href="login.jsp" class="myButton">Volver login</a>
                         <input type="submit" class="myButton" value="Registrar usuario" />
                     </div>
                 </form>
