@@ -20,105 +20,87 @@ import java.util.logging.Logger;
  */
 public class DBManager {
     
-    Connection connection = null;
+    private static String DBURL = "jbdc:derby://localhost:1527/videoClub";
+    private static String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    private static String USER_DB = "root";
+    private static String PASS_DB = "root";
     
-    DBManager()
-    {
-        //constructor
-        try
-        {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-        }
-        catch (ClassNotFoundException ex)
-        {   
-            System.out.println("Error al registrar el driver");
-        }
-    }
+    //private static Connection connection = null;
+    //private static Statement st = null;
     
-    boolean userExist(String user)
+   
+    public static boolean userExist(String user) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
+        Connection con = conectar();
         boolean exist = false;
-        try 
+        
+        String query = "select usuario from usuarios where usuario="+user;
+        System.out.println("query contruida");
+        Statement st = con.createStatement();
+        System.out.println("statement construido");
+        ResultSet rs = st.executeQuery(query);
+        System.out.println("query ejecutada");
+
+        while(rs.next())
         {
-            String query = "select usuario from usuarios where usuario="+user;
-            Statement st = this.connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            
-            while(rs.next())
-            {
-                exist = true;
-            }
-            
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            exist = true;
         }
+        con.close();
         return exist;
     }
     
-    boolean userExist(String user, String password)
+    public static boolean userExist(String user, String password) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
+        Connection con = conectar();
         boolean exist = false;
-        try 
-        {
             String query = "select usuario from usuarios where usuario="+user+" AND pass="+password;
-            Statement st = this.connection.createStatement();
+            System.out.println("query contruida");
+            Statement st = con.createStatement();
+            System.out.println("statement construido");
             ResultSet rs = st.executeQuery(query);
+            System.out.println("query ejecutada");
             
             while(rs.next())
             {
                 exist = true;
             }
-            
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            con.close();
         return exist;
     }
     
-    void conectar(String url, String user, String pass)
+    private static Connection conectar() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException
     {       
-        try 
-        {
-            this.connection = DriverManager.getConnection(url,user,pass);
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        System.out.println("Me he conectado");
+        Class.forName(DRIVER).newInstance();
+        return DriverManager.getConnection(DBManager.DBURL, DBManager.USER_DB, DBManager.PASS_DB);
     }
     
-    void executeSQLcode(String query)
+    public static void executeSQLcode(String query)
     {
-        PreparedStatement ps;
+        /*PreparedStatement ps;
         try 
         {
-            ps = this.connection.prepareStatement(query);
-            ps.execute();
+            //ps = connection.prepareStatement(query);
+            //ps.execute();
         } 
         catch (SQLException ex) 
         {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
     
-    void cerrarConexion()
+    /*public static void cerrarConexion(Connection connection)
     {
         try 
         {
-            this.connection.close();
+            connection.close();
         } 
         catch (SQLException ex) 
         {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    void main()
+    }*/
+    /*void main()
     {
                 
-    }
+    }*/
 }
