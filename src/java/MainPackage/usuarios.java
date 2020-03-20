@@ -5,6 +5,8 @@
  */
 package MainPackage;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author fiblabs
@@ -20,6 +22,7 @@ public class usuarios
         this.login = true;
         this.user = user;
         this.pass = pass;
+        //this.manager = new DBManager();
     }
     usuarios(String nombre, String apellido, String user, String email, String pass)
     {
@@ -29,11 +32,14 @@ public class usuarios
         this.email = email;
         this.user = user;
         this.pass = pass;
+        //this.manager = new DBManager();
     }
     
-    void registrar()
+    void registrar() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        if(manager.userExist(this.user))
+        //manager.conectar("jdbc:derby://localhost:1527/videoClub", "root", "root");
+        //manager.conectar();
+        if(DBManager.userExist(this.user))
         {
             //ERROR
         }
@@ -43,24 +49,32 @@ public class usuarios
         }
     }
     
-    void login()
+    int login() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        if(!(manager.userExist(this.user)))
+        int errorCode = 0;
+        //manager.conectar("jbdc:derby://localhost:1527/videoClub", "root", "root");
+        //manager.conectar();
+        if(!(DBManager.userExist(this.user)))
         {
             //ERROR
+            errorCode = -3;
         }
         else
         {
             //LOGIN
-            if(manager.userExist(this.user, this.pass))
+            if(DBManager.userExist(this.user, this.pass))
             {
                 //USER Y PASS CORRECTOS
+                errorCode = 0;
             }
             else
             {
                 //PASS INCORRECTA
+                errorCode = -2;
             }
         }
+        //manager.cerrarConexion();
+        return errorCode;
     }
     //verificar que no exista el usuario
     //insertar el usuario si existe

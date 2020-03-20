@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class DBManager {
     
     private static String DBURL = "jbdc:derby://localhost:1527/videoClub";
-    private static String DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    private static String DRIVER = "org.apache.derby.jdbc.ClientDriver";
     private static String USER_DB = "root";
     private static String PASS_DB = "root";
     

@@ -7,6 +7,9 @@ package MainPackage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -99,6 +102,7 @@ public class servletUsuarios extends HttpServlet {
             else
             {
                 //Login
+                out.println("Venimos del login bruh");
                 if(userlogin == null || passlogin == null)
                 {
                     out.println("<html>");
@@ -113,9 +117,20 @@ public class servletUsuarios extends HttpServlet {
                 }
                 else
                 {
+                    out.println("bbbbbbbbbbbb");
                     usu = new usuarios(userlogin, passlogin);
+                    int a = usu.login();
+                    out.println("aaaaaaaaaaaaa"+a);
                 }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
