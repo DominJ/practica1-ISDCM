@@ -5,6 +5,7 @@
  */
 package MainPackage;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -15,7 +16,7 @@ public class usuarios
 {
     boolean login;
     String nombre, apellido, email, user, pass;
-    DBManager manager = null;
+    Connection connection;
     
     usuarios(String user, String pass)
     {
@@ -38,8 +39,9 @@ public class usuarios
     void registrar() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         //manager.conectar("jdbc:derby://localhost:1527/videoClub", "root", "root");
+        this.connection = DBManager.conectar();
         //manager.conectar();
-        if(DBManager.userExist(this.user))
+        if(DBManager.userExist(this.connection, this.user))
         {
             //ERROR
         }
@@ -53,8 +55,9 @@ public class usuarios
     {
         int errorCode = 0;
         //manager.conectar("jbdc:derby://localhost:1527/videoClub", "root", "root");
+        this.connection = DBManager.conectar();
         //manager.conectar();
-        if(!(DBManager.userExist(this.user)))
+        if(!(DBManager.userExist(this.connection, this.user)))
         {
             //ERROR
             errorCode = -3;
@@ -62,7 +65,7 @@ public class usuarios
         else
         {
             //LOGIN
-            if(DBManager.userExist(this.user, this.pass))
+            if(DBManager.userExist(this.connection, this.user, this.pass))
             {
                 //USER Y PASS CORRECTOS
                 errorCode = 0;
@@ -73,7 +76,7 @@ public class usuarios
                 errorCode = -2;
             }
         }
-        //manager.cerrarConexion();
+        this.connection.close();
         return errorCode;
     }
     //verificar que no exista el usuario

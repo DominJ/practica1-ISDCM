@@ -29,9 +29,8 @@ public class DBManager {
     //private static Statement st = null;
     
    
-    public static boolean userExist(String user) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    public static boolean userExist(Connection con, String user) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        Connection con = conectar();
         boolean exist = false;
         
         String query = "select usuario from usuarios where usuario="+user;
@@ -49,9 +48,8 @@ public class DBManager {
         return exist;
     }
     
-    public static boolean userExist(String user, String password) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    public static boolean userExist(Connection con, String user, String password) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        Connection con = conectar();
         boolean exist = false;
             String query = "select usuario from usuarios where usuario="+user+" AND pass="+password;
             System.out.println("query contruida");
@@ -68,10 +66,10 @@ public class DBManager {
         return exist;
     }
     
-    private static Connection conectar() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException
+    public static Connection conectar() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException
     {       
-        Class.forName(DRIVER).newInstance();
-        return DriverManager.getConnection(DBManager.DBURL, DBManager.USER_DB, DBManager.PASS_DB);
+        /*Class.forName(DRIVER);*/
+        return DriverManager.getConnection(DBManager.DBURL+";user="+DBManager.USER_DB+";password="+DBManager.PASS_DB);
     }
     
     public static void executeSQLcode(String query)
