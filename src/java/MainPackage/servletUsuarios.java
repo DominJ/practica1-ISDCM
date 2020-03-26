@@ -47,19 +47,6 @@ public class servletUsuarios extends HttpServlet {
     String passlogin;
     
     
-    boolean checkMail(String correo)
-    {
-        boolean checked = false;
-        for(int i=0; i<=correo.length(); i++)
-        {
-            if(correo.charAt(i)== '@')
-            {
-                checked = true;
-            }
-        }
-        return checked;
-    }
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException 
     {
@@ -114,8 +101,17 @@ public class servletUsuarios extends HttpServlet {
                 }
                 else
                 {
-                    //usu = new usuarios(nombre, apellidos, correo, user, pass);
-                    //usu.registrar();
+                    out.println("aaaassssssssssssssss");
+                    conectar();
+                    if(userExist(user))
+                    {
+                        out.println("El usuario ya existe");
+                    }
+                    else
+                    {
+                        int code = registrar();
+                    }
+                    desconectar();
                 }
             }
             else
@@ -135,13 +131,18 @@ public class servletUsuarios extends HttpServlet {
                 }
                 else
                 {
-                    out.println(userlogin);
+                    //out.println(userlogin);
                     conectar();
-                    out.println(login());
+                    int code = login();
                     desconectar();
-                    //usu = new usuarios(userlogin, passlogin);
-                    //int a = usu.login();
-                    //out.println("aaaaaaaaaaaaa"+a);
+                    switch(code)
+                    {
+                        case 0  :   out.println("login correcto");
+                                    break;
+                        case -2 :   out.println("pass incorrecta");
+                                    break;
+                        case -3 :   out.println("user incorrecta");
+                    }
                 }
             }
         }    
@@ -204,6 +205,7 @@ public class servletUsuarios extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    /*DATABASE FUNCTIONS-------------------------------------------------*/
     private void conectar() throws SQLException
     {
         connection = DriverManager.getConnection("jdbc:derby://localhost:1527/videoClub;user=root;password=root");
@@ -235,21 +237,44 @@ public class servletUsuarios extends HttpServlet {
         {
             //ERROR
             errorCode = -3;
-            System.out.println("que no existe el puto user");
         }
         return errorCode;
     }
     
-    private void registrar() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    private int registrar() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
+        int errorCode = 0;
         if(userExist(user))
         {
             //ERROR
+            errorCode = -3;
         }
         else
         {
             //REGISTRAMOS
+            String query = "INSERT INTO USUARIOS (NOMBRE, APELLIDO, EMAIL, PASS, USUARIO) " +
+                            "VALUES ('"+nombre+"', '"+apellidos+"', '"+correo+"', '"+pass+"', '"+user+"')";
+            System.out.println("query contruida");
+            Statement st = connection.createStatement();
+            System.out.println("statement construido");
+            st.executeUpdate(query);
+            System.out.println("update ejecutada");
         }
+        return errorCode;
+    }
+    
+    private boolean checkMail(String correo)
+    {
+        System.out.println("gggggggggggggg");
+        boolean checked = false;
+        for(int i=0; i<correo.length(); i++)
+        {
+            if(correo.charAt(i)== '@')
+            {
+                checked = true;
+            }
+        }
+        return checked;
     }
     
     private boolean userExist(String user) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
