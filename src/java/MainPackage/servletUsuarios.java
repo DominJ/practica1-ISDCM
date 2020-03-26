@@ -68,10 +68,10 @@ public class servletUsuarios extends HttpServlet {
         
         Class.forName("org.apache.derby.jdbc.ClientDriver");
         
-        conectar();
-        Statement statement = connection.createStatement();
-        statement.setQueryTimeout(30);
-        connection.close();
+        //conectar();
+        //Statement statement = connection.createStatement();
+        //statement.setQueryTimeout(30);
+        //connection.close();
         
         try (PrintWriter out = response.getWriter()) 
         {
@@ -135,9 +135,10 @@ public class servletUsuarios extends HttpServlet {
                 }
                 else
                 {
-                    out.println("bbbbbbbbbbbb");
+                    out.println(userlogin);
                     conectar();
                     out.println(login());
+                    desconectar();
                     //usu = new usuarios(userlogin, passlogin);
                     //int a = usu.login();
                     //out.println("aaaaaaaaaaaaa"+a);
@@ -216,17 +217,10 @@ public class servletUsuarios extends HttpServlet {
     private int login() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         int errorCode = 0;
-        //manager.conectar("jbdc:derby://localhost:1527/videoClub", "root", "root");
-        //manager.conectar();
-        if(!(userExist(this.user)))
-        {
-            //ERROR
-            errorCode = -3;
-        }
-        else
+        if(userExist(this.userlogin))
         {
             //LOGIN
-            if(userExist(this.user, this.pass))
+            if(userExist(this.userlogin, this.passlogin))
             {
                 //USER Y PASS CORRECTOS
                 errorCode = 0;
@@ -235,7 +229,13 @@ public class servletUsuarios extends HttpServlet {
             {
                 //PASS INCORRECTA
                 errorCode = -2;
-            }
+            }     
+        }
+        else
+        {
+            //ERROR
+            errorCode = -3;
+            System.out.println("que no existe el puto user");
         }
         return errorCode;
     }
@@ -256,7 +256,7 @@ public class servletUsuarios extends HttpServlet {
     {
         boolean exist = false;
         
-        String query = "select usuario from usuarios where usuario="+user+";";
+        String query = "select usuario from usuarios where usuario='"+user+"'";
         System.out.println("query contruida");
         Statement st = connection.createStatement();
         System.out.println("statement construido");
@@ -265,6 +265,7 @@ public class servletUsuarios extends HttpServlet {
 
         while(rs.next())
         {
+            System.out.println(rs.getString("usuario"));
             exist = true;
         }
         return exist;
@@ -273,7 +274,7 @@ public class servletUsuarios extends HttpServlet {
     public boolean userExist(String user, String password) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         boolean exist = false;
-        String query = "select usuario from usuarios where usuario="+user+" AND pass="+password;
+        String query = "select usuario from usuarios where usuario='"+user+"' AND pass='"+password+"'";
         System.out.println("query contruida");
         Statement st = connection.createStatement();
         System.out.println("statement construido");
