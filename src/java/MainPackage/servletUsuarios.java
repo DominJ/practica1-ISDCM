@@ -101,15 +101,33 @@ public class servletUsuarios extends HttpServlet {
                 }
                 else
                 {
-                    out.println("aaaassssssssssssssss");
+                    //out.println("aaaassssssssssssssss");
                     conectar();
                     if(userExist(user))
                     {
+                        out.println("<html>");
+                        out.println("<head>");
+                        out.println("<title>Servlet servletUsuarios</title>");            
+                        out.println("</head>");
+                        out.println("<body>");
                         out.println("El usuario ya existe");
+                        out.println("<a href=\"registroUsu.jsp\">Volver</a>");
+                        out.println("</body>");
+                        out.println("</html>");
                     }
                     else
                     {
+                        //out.println("aaaasssssssssssssssstit");
                         int code = registrar();
+                        out.println("<html>");
+                        out.println("<head>");
+                        out.println("<title>Servlet servletUsuarios</title>");            
+                        out.println("</head>");
+                        out.println("<body>");
+                        out.println("Registro correcto. Porfavor inicie sesión.");
+                        out.println("<a href=\"login.jsp\">Ir a loggin</a>");
+                        out.println("</body>");
+                        out.println("</html>");
                     }
                     desconectar();
                 }
@@ -137,11 +155,35 @@ public class servletUsuarios extends HttpServlet {
                     desconectar();
                     switch(code)
                     {
-                        case 0  :   out.println("login correcto");
+                        case 0  :   out.println("<html>");
+                                    out.println("<head>");
+                                    out.println("<title>Servlet servletUsuarios</title>");            
+                                    out.println("</head>");
+                                    out.println("<body>");
+                                    out.println("Loggin correcto");
+                                    out.println("<META HTTP-EQUIV=REFRESH CONTENT=1;URL=video.jsp>" );
+                                    out.println("</body>");
+                                    out.println("</html>");
                                     break;
-                        case -2 :   out.println("pass incorrecta");
+                        case -2 :   out.println("<html>");
+                                    out.println("<head>");
+                                    out.println("<title>Servlet servletUsuarios</title>");            
+                                    out.println("</head>");
+                                    out.println("<body>");
+                                    out.println("pass incorrecta");
+                                    out.println("<a href=\"login.jsp\">Volver</a>");
+                                    out.println("</body>");
+                                    out.println("</html>");
                                     break;
-                        case -3 :   out.println("user incorrecta");
+                        case -3 :   out.println("<html>");
+                                    out.println("<head>");
+                                    out.println("<title>Servlet servletUsuarios</title>");            
+                                    out.println("</head>");
+                                    out.println("<body>");
+                                    out.println("user incorrecto");
+                                    out.println("<a href=\"login.jsp\">Volver</a>");
+                                    out.println("</body>");
+                                    out.println("</html>");
                     }
                 }
             }
