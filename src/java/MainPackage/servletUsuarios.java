@@ -14,11 +14,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,6 +39,7 @@ public class servletUsuarios extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     Connection connection = null;
+    usuarios usu = null;
     String nombre;
     String apellidos;
     String correo;
@@ -45,6 +48,8 @@ public class servletUsuarios extends HttpServlet {
     String repass;
     String userlogin;
     String passlogin;
+    int userID;
+    HttpSession misession;
     
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -71,6 +76,7 @@ public class servletUsuarios extends HttpServlet {
             repass = request.getParameter("repass");
             userlogin = request.getParameter("userlogin");
             passlogin = request.getParameter("passlogin");
+            misession = request.getSession();
 
             if(userlogin == null && passlogin == null)
             {
@@ -153,19 +159,25 @@ public class servletUsuarios extends HttpServlet {
                     conectar();
                     int code = login();
                     desconectar();
+                    out.println(code);
                     switch(code)
                     {
-                        case 0  :   out.println("<html>");
+                        case 0  :   
+                                    
+                                    usu = new usuarios(true, userlogin, userID);
+                                    out.println("<html>");  //LOGIN CORRECTO
                                     out.println("<head>");
                                     out.println("<title>Servlet servletUsuarios</title>");            
                                     out.println("</head>");
                                     out.println("<body>");
-                                    out.println("Loggin correcto");
+                                    out.println("Login correcto");
                                     out.println("<META HTTP-EQUIV=REFRESH CONTENT=1;URL=video.jsp>" );
                                     out.println("</body>");
                                     out.println("</html>");
                                     break;
-                        case -2 :   out.println("<html>");
+                        case -2 :   
+                                    usu = new usuarios();
+                                    out.println("<html>");
                                     out.println("<head>");
                                     out.println("<title>Servlet servletUsuarios</title>");            
                                     out.println("</head>");
@@ -175,7 +187,9 @@ public class servletUsuarios extends HttpServlet {
                                     out.println("</body>");
                                     out.println("</html>");
                                     break;
-                        case -3 :   out.println("<html>");
+                        case -3 :   
+                                    usu = new usuarios();
+                                    out.println("<html>");
                                     out.println("<head>");
                                     out.println("<title>Servlet servletUsuarios</title>");            
                                     out.println("</head>");
@@ -185,6 +199,8 @@ public class servletUsuarios extends HttpServlet {
                                     out.println("</body>");
                                     out.println("</html>");
                     }
+                    misession.setAttribute("usuario", usu);
+                    response.sendRedirect("registroVideo.jsp");
                 }
             }
         }    
@@ -341,7 +357,7 @@ public class servletUsuarios extends HttpServlet {
     public boolean userExist(String user, String password) throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         boolean exist = false;
-        String query = "select usuario from usuarios where usuario='"+user+"' AND pass='"+password+"'";
+        String query = "select ID from usuarios where usuario='"+user+"' AND pass='"+password+"'";
         System.out.println("query contruida");
         Statement st = connection.createStatement();
         System.out.println("statement construido");
@@ -350,6 +366,7 @@ public class servletUsuarios extends HttpServlet {
 
         while(rs.next())
         {
+            userID = rs.getInt("ID");
             exist = true;
         }
         return exist;

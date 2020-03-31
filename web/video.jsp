@@ -5,7 +5,16 @@
 --%>
 
 
+<%@page import="MainPackage.usuarios"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% 
+    usuarios user = (usuarios)session.getAttribute("usuario");
+    if(user == null || user.getLogin() != true)
+    {
+        //El user ya se ha logeado
+        response.sendRedirect("login.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>

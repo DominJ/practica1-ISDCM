@@ -8,13 +8,9 @@ package MainPackage;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -22,13 +18,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author vroig
+ * @author fiblabs
  */
-@WebServlet(name = "servletRegistroVid", urlPatterns = {"/servletRegistroVid"})
-public class servletRegistroVid extends HttpServlet {
+@WebServlet(name = "servletRegistroVideo", urlPatterns = {"/servletRegistroVideo"})
+public class servletRegistroVideo extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,19 +40,18 @@ public class servletRegistroVid extends HttpServlet {
     Connection connection = null;
     String titulo;
     String autor;
-    String duracion;
+    int duracion;
     String descripcion;
     String formato;
     
     long millis=System.currentTimeMillis();  
     java.sql.Date fecha_creacion=new java.sql.Date(millis);
+    HttpSession misession;
     
     
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException 
-    {
-        
+            throws ServletException, IOException, ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException {
         response.setContentType("text/html;charset=UTF-8");
         
         Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -66,15 +62,14 @@ public class servletRegistroVid extends HttpServlet {
             
             titulo = request.getParameter("titulo");
             autor = request.getParameter("autor");
-            duracion = request.getParameter("duracion");
+            duracion = Integer.parseInt(request.getParameter("duracion"));
             descripcion = request.getParameter("descripcion");
             formato = request.getParameter("formato");
-            out.println("aaaassssssssssssssss");
+            misession = request.getSession();
+            
             if(titulo != null && autor != null && descripcion != null && formato != null)
             {
                 //Registro nuevo
-                out.println("aaaassssssssssssssss");
-                out.println("aaaassssssssssssssss");
                 conectar();
                 if(tituloExist(titulo))
                 {
@@ -90,7 +85,6 @@ public class servletRegistroVid extends HttpServlet {
                 }
                 else
                 {
-                    out.println("aaaasssssssssssssssstit");
                     int code = registrarvideo();
                     out.println("<html>");
                     out.println("<head>");
@@ -112,8 +106,54 @@ public class servletRegistroVid extends HttpServlet {
         }    
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException ex) {
+            Logger.getLogger(servletRegistroVideo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-    /*DATABASE FUNCTIONS-------------------------------------------------*/
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (ClassNotFoundException | SQLException | IllegalAccessException | InstantiationException ex) {
+            Logger.getLogger(servletRegistroVideo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+    
+/*DATABASE FUNCTIONS-------------------------------------------------*/
     private void conectar() throws SQLException
     {
         connection = DriverManager.getConnection("jdbc:derby://localhost:1527/videoClub;user=root;password=root");
@@ -136,11 +176,13 @@ public class servletRegistroVid extends HttpServlet {
         }
         else
         {
+            
             //REGISTRAMOS
-            String query = "INSERT INTO VIDEOS (TITULO, AUTOR, FECHA_CREACION, DURACION, DESCRIPCION, FORMATO) " +
-                            "VALUES ('"+titulo+"', '"+autor+"', '"+fecha_creacion+"', '"+duracion+"', '"+descripcion+"', '"+formato+"')";
+            usuarios usu = (usuarios)misession.getAttribute("usuario");
+            String query = "INSERT INTO VIDEOS (USERID, TITULO, AUTOR, FECHA_CREACION, DURACION, DESCRIPCION, FORMATO, NUMERO_REPRODUCCIONES) " +
+                            "VALUES ("+usu.getID()+", '"+titulo+"', '"+autor+"', '"+fecha_creacion+"', "+duracion+", '"+descripcion+"', '"+formato+"',0)";
             System.out.println("query contruida");
-            Statement st = connection.createStatement();
+            java.sql.Statement st = connection.createStatement();
             System.out.println("statement construido");
             st.executeUpdate(query);
             System.out.println("update ejecutada");
@@ -155,7 +197,7 @@ public class servletRegistroVid extends HttpServlet {
         
         String query = "select titulo from videos where titulo='"+titulo+"'";
         System.out.println("query contruida");
-        Statement st = connection.createStatement();
+        java.sql.Statement st = connection.createStatement();
         System.out.println("statement construido");
         ResultSet rs = st.executeQuery(query);
         System.out.println("query ejecutada");

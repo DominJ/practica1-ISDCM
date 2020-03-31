@@ -4,7 +4,16 @@
     Author     : fiblabs
 --%>
 
+<%@page import="MainPackage.usuarios"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<% 
+    usuarios user = (usuarios)session.getAttribute("usuario");
+    if(user != null && user.getLogin())
+    {
+        //El user ya se ha logeado
+        response.sendRedirect("registroVideo.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>

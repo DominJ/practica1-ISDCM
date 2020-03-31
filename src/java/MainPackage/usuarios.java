@@ -5,9 +5,6 @@
  */
 package MainPackage;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 /**
  *
  * @author fiblabs
@@ -15,75 +12,45 @@ import java.sql.SQLException;
 public class usuarios 
 {
     boolean login;
-    String nombre, apellido, email, user, pass;
-    Connection connection;
+    String user;
+    int userID;
     
-    usuarios(String user, String pass)
-    {
-        this.login = true;
-        this.user = user;
-        this.pass = pass;
-        //this.manager = new DBManager();
-    }
-    usuarios(String nombre, String apellido, String user, String email, String pass)
+    usuarios()
     {
         this.login = false;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
+        this.user = null;
+        this.userID = -1;
+    }
+    
+    usuarios(boolean login, String user, int userID)
+    {
+        this.login = login;
         this.user = user;
-        this.pass = pass;
-        //this.manager = new DBManager();
+        this.userID = userID;
     }
     
-    void registrar() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    public boolean getLogin()
     {
-        //manager.conectar("jdbc:derby://localhost:1527/videoClub", "root", "root");
-        this.connection = DBManager.conectar();
-        //manager.conectar();
-        if(DBManager.userExist(this.connection, this.user))
-        {
-            //ERROR
-        }
-        else
-        {
-            //REGISTRAMOS
-        }
+        return login;
     }
     
-    int login() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException
+    public void setLogin(boolean login)
     {
-        int errorCode = 0;
-        //manager.conectar("jbdc:derby://localhost:1527/videoClub", "root", "root");
-        this.connection = DBManager.conectar();
-        //manager.conectar();
-        if(!(DBManager.userExist(this.connection, this.user)))
-        {
-            //ERROR
-            errorCode = -3;
-        }
-        else
-        {
-            //LOGIN
-            if(DBManager.userExist(this.connection, this.user, this.pass))
-            {
-                //USER Y PASS CORRECTOS
-                errorCode = 0;
-            }
-            else
-            {
-                //PASS INCORRECTA
-                errorCode = -2;
-            }
-        }
-        this.connection.close();
-        return errorCode;
+        this.login = login;
     }
-    //verificar que no exista el usuario
-    //insertar el usuario si existe
-    //dar login
-    /*DBManager manager = new DBManager();
-        manager.conectar("c:derby://localhost:1527/videoClub", "root", "root");
-        manager.executeSQLcode("INSERT INTO");
-        manager.cerrarConexion();*/
+    
+    public String getUser()
+    {
+        return user;
+    }
+    
+    public void setUser(String user)
+    {
+        this.user = user;
+    }
+    
+    public int getID()
+    {
+        return this.userID;
+    }
 }
