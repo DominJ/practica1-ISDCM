@@ -147,3 +147,14 @@ font-style: normal;
 font-variant: normal;
 text-transform: uppercase;
 }
+
+table
+{
+  width: 100%;
+  background-color: #FFFFFF;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #7ea8f8;
+  border-style: solid;
+  color: #000000;
+}
