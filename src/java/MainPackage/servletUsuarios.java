@@ -200,7 +200,7 @@ public class servletUsuarios extends HttpServlet {
                                     out.println("</html>");
                     }
                     misession.setAttribute("usuario", usu);
-                    response.sendRedirect("registroVideo.jsp");
+                    response.sendRedirect("video.jsp");
                 }
             }
         }    

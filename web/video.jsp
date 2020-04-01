@@ -15,8 +15,13 @@
     usuarios user = (usuarios)session.getAttribute("usuario");
     if(user == null || user.getLogin() != true)
     {
-        //El user ya se ha logeado
+        //El user no se ha logeado
         response.sendRedirect("login.jsp");
+    }
+    else
+    {
+        System.out.println("Ya existe el user y es: "+user.getLogin());
+        System.out.println("Ya existe el user y es: "+user.getUser());
     }
 %>
 <!DOCTYPE html>
@@ -34,7 +39,6 @@
         </header>
         <section>
             <div class="principal">
-                <form action="servletUsuarios" method="get">
                     <div class="subcabecera" id="FontTitle">Listado de videos existentes con sus propiedades</div>
                     <div>
                     <table class="mytable">
@@ -60,7 +64,6 @@
                     <div class="subpie">
                         <a href="registroVideo.jsp" class="myButton">Registrar un nuevo video</a>
                     </div>
-                </form>
             </div>
         </section>
         <footer>
