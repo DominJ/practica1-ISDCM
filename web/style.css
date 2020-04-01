@@ -161,15 +161,17 @@ table
 
 th
 {
+    text-align: left;
     border-collapse: collapse;
-  border-width: 2px;
-  border-color: #7ea8f8;
-  border-style: solid;
+    border-width: 2px;
+    border-color: #7ea8f8;
+    border-style: solid;
 }
 td
 {
+    text-align: left;
     border-collapse: collapse;
-  border-width: 2px;
-  border-color: #7ea8f8;
-  border-style: solid;
+    border-width: 2px;
+    border-color: #7ea8f8;
+    border-style: solid;
 }
