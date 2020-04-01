@@ -39,6 +39,7 @@
         </header>
         <section>
             <div class="principal">
+                    <% out.println("Usuario actual: "+ user.getUser()); %>
                     <div class="subcabecera" id="FontTitle">Listado de videos existentes con sus propiedades</div>
                     <div>
                     <table class="mytable">

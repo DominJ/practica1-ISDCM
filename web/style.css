@@ -150,7 +150,6 @@ text-transform: uppercase;
 
 table
 {
-  text-align: left;
   width: 100%;
   background-color: #FFFFFF;
   border-collapse: collapse;
@@ -158,4 +157,19 @@ table
   border-color: #7ea8f8;
   border-style: solid;
   color: #000000;
+}
+
+th
+{
+    border-collapse: collapse;
+  border-width: 2px;
+  border-color: #7ea8f8;
+  border-style: solid;
+}
+td
+{
+    border-collapse: collapse;
+  border-width: 2px;
+  border-color: #7ea8f8;
+  border-style: solid;
 }
