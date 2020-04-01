@@ -43,7 +43,7 @@
                     <div class="subcabecera" id="FontTitle">Listado de videos existentes con sus propiedades</div>
                     <div>
                     <table class="mytable">
-                        <tr> <th>Título</th> <th>Autor</th> <th>Fecha</th> <th>Duración</th> <th>Numero de reproducciones</th> <th>Descripción</th> <th>Formato</th> </tr>
+                        <tr> <th>Título</th> <th>Autor</th> <th>Fecha</th> <th>Duración(Seg)</th> <th>Numero de reproducciones</th> <th>Descripción</th> <th>Formato</th> </tr>
                         <% 
                             Connection connection = null;
                             Class.forName("org.apache.derby.jdbc.ClientDriver");
