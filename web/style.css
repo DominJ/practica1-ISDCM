@@ -150,6 +150,7 @@ text-transform: uppercase;
 
 table
 {
+  text-align: left;
   width: 100%;
   background-color: #FFFFFF;
   border-collapse: collapse;

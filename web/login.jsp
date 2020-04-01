@@ -11,7 +11,7 @@
     if(user != null && user.getLogin())
     {
         //El user ya se ha logeado
-        response.sendRedirect("registroVideo.jsp");
+        response.sendRedirect("video.jsp");
     }
 %>
 <!DOCTYPE html>

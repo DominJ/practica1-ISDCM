@@ -15,8 +15,13 @@
     usuarios user = (usuarios)session.getAttribute("usuario");
     if(user == null || user.getLogin() != true)
     {
-        //El user ya se ha logeado
+        //El user no se ha logeado
         response.sendRedirect("login.jsp");
+    }
+    else
+    {
+        System.out.println("Ya existe el user y es: "+user.getLogin());
+        System.out.println("Ya existe el user y es: "+user.getUser());
     }
 %>
 <!DOCTYPE html>
@@ -34,31 +39,30 @@
         </header>
         <section>
             <div class="principal">
-                <div class="subcabecera" id="FontTitle">Listado de videos existentes con sus propiedades</div>
-                <div>
-                <table class="mytable">
-                    <tr> <th>Título</th> <th>Autor</th> <th>Fecha</th> <th>Duración</th> <th>Numero de reproducciones</th> <th>Descripción</th> <th>Formato</th> </tr>
-                    <% 
-                        Connection connection = null;
-                        Class.forName("org.apache.derby.jdbc.ClientDriver");
-                        connection = DriverManager.getConnection("jdbc:derby://localhost:1527/videoClub;user=root;password=root");
-                        String query = "select * from VIDEOS";
-                        //System.out.println("query contruida");
-                        Statement st = connection.createStatement();
-                        //System.out.println("statement construido");
-                        ResultSet rs = st.executeQuery(query);
-                        //System.out.println("query ejecutada");
-
-                        while(rs.next())
-                        {
-                            out.println("<tr><td>"+rs.getString("titulo")+"</td> <td>"+rs.getString("autor")+"</td> <td>"+rs.getString("fecha_creacion")+"</td> <td>"+rs.getString("duracion")+"</td> <td>"+rs.getString("numero_reproducciones")+"</td> <td>"+rs.getString("descripcion")+"</td> <td>"+rs.getString("formato")+"</td></tr>");
-                        }
-                    %>
-                </table>
-                </div>
-                <div class="subpie">
-                    <a href="registroVideo.jsp" class="myButton">Registrar un nuevo video</a>
-                </div>
+                    <div class="subcabecera" id="FontTitle">Listado de videos existentes con sus propiedades</div>
+                    <div>
+                    <table class="mytable">
+                        <tr> <th>Título</th> <th>Autor</th> <th>Fecha</th> <th>Duración</th> <th>Numero de reproducciones</th> <th>Descripción</th> <th>Formato</th> </tr>
+                        <% 
+                            Connection connection = null;
+                            Class.forName("org.apache.derby.jdbc.ClientDriver");
+                            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/videoClub;user=root;password=root");
+                            String query = "select * from VIDEOS";
+                            //System.out.println("query contruida");
+                            Statement st = connection.createStatement();
+                            //System.out.println("statement construido");
+                            ResultSet rs = st.executeQuery(query);
+                            //System.out.println("query ejecutada");
+                            while(rs.next())
+                            {
+                                out.println("<tr><td>"+rs.getString("titulo")+"</td> <td>"+rs.getString("autor")+"</td> <td>"+rs.getString("fecha_creacion")+"</td> <td>"+rs.getString("duracion")+"</td> <td>"+rs.getString("numero_reproducciones")+"</td> <td>"+rs.getString("descripcion")+"</td> <td>"+rs.getString("formato")+"</td></tr>");
+                            }
+                        %>
+                    </table>
+                    </div>
+                    <div class="subpie">
+                        <a href="registroVideo.jsp" class="myButton">Registrar un nuevo video</a>
+                    </div>
             </div>
         </section>
         <footer>
