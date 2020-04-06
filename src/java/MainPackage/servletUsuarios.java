@@ -7,6 +7,7 @@ package MainPackage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -53,12 +54,11 @@ public class servletUsuarios extends HttpServlet {
     
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException, SQLException, IllegalAccessException, InstantiationException 
     {
         
         response.setContentType("text/html;charset=UTF-8");
         
-        Class.forName("org.apache.derby.jdbc.ClientDriver");
+        
         
         //conectar();
         //Statement statement = connection.createStatement();
@@ -67,7 +67,7 @@ public class servletUsuarios extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) 
         {
-            
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
             nombre = request.getParameter("nombre");
             apellidos = request.getParameter("apellidos");
             correo = request.getParameter("correo");
@@ -77,6 +77,7 @@ public class servletUsuarios extends HttpServlet {
             userlogin = request.getParameter("userlogin");
             passlogin = request.getParameter("passlogin");
             misession = request.getSession();
+            
 
             if(userlogin == null && passlogin == null)
             {
@@ -203,6 +204,31 @@ public class servletUsuarios extends HttpServlet {
                     response.sendRedirect("video.jsp");
                 }
             }
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("Excepción de input/output.");
+        } 
+        catch (ClassNotFoundException ex) 
+        {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("No se ha encontrado alguna de las clases que se utiliza.");
+        } 
+        catch (SQLException ex) 
+        {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("Se ha producido un problema en la ejecución de código SQL.");
+        } 
+        catch (IllegalAccessException ex) 
+        {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("Se ha producido un acceso no permitido a la base de datos.");
+        } 
+        catch (InstantiationException ex) 
+        {
+            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("Se ha producido un problemas en la instanciación de la conexión");
         }    
     }
 
@@ -218,15 +244,7 @@ public class servletUsuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -240,17 +258,7 @@ public class servletUsuarios extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(servletUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -311,7 +319,7 @@ public class servletUsuarios extends HttpServlet {
         {
             //REGISTRAMOS
             String query = "INSERT INTO USUARIOS (NOMBRE, APELLIDO, EMAIL, PASS, USUARIO) " +
-                            "VALUES ('"+nombre+"', '"+apellidos+"', '"+correo+"', '"+pass+"', '"+user+"')";
+                    "VALUES ('"+nombre+"', '"+apellidos+"', '"+correo+"', '"+pass+"', '"+user+"')";
             System.out.println("query contruida");
             Statement st = connection.createStatement();
             System.out.println("statement construido");
@@ -323,7 +331,6 @@ public class servletUsuarios extends HttpServlet {
     
     private boolean checkMail(String correo)
     {
-        System.out.println("gggggggggggggg");
         boolean checked = false;
         for(int i=0; i<correo.length(); i++)
         {
